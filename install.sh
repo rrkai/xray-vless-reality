@@ -111,6 +111,20 @@ fi
 apt update
 apt install -y curl wget sudo jq qrencode net-tools lsof
 
+# 使用 Python 生成二维码
+# 首先确保安装了 python3 和 pip3
+if ! command -v python3 &> /dev/null || ! command -v pip3 &> /dev/null; then
+    echo "正在安装 python3 和 pip3..."
+    apt-get update -qq > /dev/null 2>&1
+    apt-get install -y python3 python3-pip > /dev/null 2>&1
+fi
+
+# 安装 qrcode[pil] 库 (如果未安装)
+if ! python3 -c "import qrcode" &> /dev/null; then
+    echo "正在安装 qrcode 库..."
+    pip3 install qrcode[pil] > /dev/null 2>&1
+fi
+
 # Xray官方脚本 安装最新版本
 echo
 echo -e "${yellow}Xray官方脚本安装 v25.12.2 版本$none"
@@ -506,20 +520,6 @@ echo -e "${cyan}${vless_reality_url}${none}"
 echo
 sleep 3
 echo "---------- 二维码 (Python) ----------"
-# 使用 Python 生成二维码
-# 首先确保安装了 python3 和 pip3
-if ! command -v python3 &> /dev/null || ! command -v pip3 &> /dev/null; then
-    echo "正在安装 python3 和 pip3..."
-    apt-get update -qq > /dev/null 2>&1
-    apt-get install -y python3 python3-pip > /dev/null 2>&1
-fi
-
-# 安装 qrcode[pil] 库 (如果未安装)
-if ! python3 -c "import qrcode" &> /dev/null; then
-    echo "正在安装 qrcode 库..."
-    pip3 install qrcode[pil] > /dev/null 2>&1
-fi
-
 # 使用 Python 脚本生成并打印二维码
 python3 -c "
 import qrcode
