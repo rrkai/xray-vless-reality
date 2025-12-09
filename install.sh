@@ -505,7 +505,6 @@ echo "---------- 二维码 (UTF8) ----------"
 qrencode -t UTF8 "$vless_reality_url_encoded"
 echo
 echo "---------- END -------------"
-echo "以上节点信息保存在 ~/_vless_reality_url_ 中"
 
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
