@@ -502,13 +502,13 @@ echo -e "${cyan}${vless_reality_url}${none}"
 echo
 sleep 3
 echo "---------- 二维码 (UTF8) ----------"
-qrencode -t UTF8 "$vless_reality_url_encoded"
+qrencode -t ANSI256 "$vless_reality_url_encoded"
 echo "---------- END -------------"
 
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
 echo "---------- 二维码 (UTF8) ----------" >> ~/_vless_reality_url_
-qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
+qrencode -t ANSI256 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
 # 检查当前shell是bash还是zsh，并选择对应的配置文件
