@@ -502,15 +502,12 @@ echo -e "${cyan}${vless_reality_url}${none}"
 echo
 sleep 3
 echo "---------- 二维码 (UTF8) ----------"
-# 移除 -s 1 参数，使用默认大小以保证可读性
 qrencode -t UTF8 "$vless_reality_url_encoded"
-echo
 echo "---------- END -------------"
 
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
 echo "---------- 二维码 (UTF8) ----------" >> ~/_vless_reality_url_
-# 同样移除保存到文件中的二维码的 -s 1 参数
 qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
