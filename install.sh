@@ -467,21 +467,21 @@ if [[ $netstack == "6" ]]; then
   ip=[$ip]
 fi
 vless_reality_url="vless://${uuid}@${ip}:${port}?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&sni=${domain}&fp=${fingerprint}&pbk=${public_key}&sid=${shortid}&spx=${spiderx}&#VLESS_R_${ip}"
+# 对URL中的特殊字符进行编码，特别是#号，以提高扫码成功率
+vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
 echo -e "${cyan}${vless_reality_url}${none}"
 echo
 sleep 3
-echo "以下两个二维码完全一样的内容"
-# qrencode -t UTF8 $vless_reality_url
-qrencode -t ANSI $vless_reality_url
+echo "---------- 二维码 (UTF8) ----------"
+qrencode -t UTF8 "$vless_reality_url_encoded"
 echo
 echo "---------- END -------------"
 echo "以上节点信息保存在 ~/_vless_reality_url_ 中"
 
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
-echo "以下两个二维码完全一样的内容" >> ~/_vless_reality_url_
-# qrencode -t UTF8 $vless_reality_url >> ~/_vless_reality_url_
-qrencode -t ANSI $vless_reality_url >> ~/_vless_reality_url_
+echo "---------- 二维码 (UTF8) ----------" >> ~/_vless_reality_url_
+qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 
 echo
 echo "节点信息保存在 ~/_vless_reality_url_ 中"
