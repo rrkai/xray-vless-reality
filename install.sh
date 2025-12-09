@@ -485,3 +485,36 @@ qrencode -t ANSI $vless_reality_url >> ~/_vless_reality_url_
 
 echo
 echo "节点信息保存在 ~/_vless_reality_url_ 中"
+
+# ---------- 新增: 修改 DNS 步骤 ----------
+echo
+echo -e "$yellow开始修改系统 DNS$none"
+echo "----------------------------------------------------------------"
+
+# 创建或修改 /etc/resolv.conf.head 文件
+cat > /etc/resolv.conf.head << EOF
+nameserver 1.1.1.1
+nameserver 9.9.9.9
+EOF
+
+# 重新生成 /etc/resolv.conf 文件
+if command -v resolvconf &> /dev/null; then
+    # 如果安装了 resolvconf 工具
+    resolvconf -u
+    echo -e "${green}已通过 resolvconf 更新 DNS${none}"
+else
+    # 如果没有安装 resolvconf，直接备份并覆盖 /etc/resolv.conf
+    # 检查 /etc/resolv.conf 是否已存在备份
+    if [[ ! -f /etc/resolv.conf.bak ]]; then
+        cp /etc/resolv.conf /etc/resolv.conf.bak
+        echo -e "${green}已备份原 /etc/resolv.conf 到 /etc/resolv.conf.bak${none}"
+    fi
+    # 将 head 文件内容和原内容合并，写入新的 resolv.conf
+    cat /etc/resolv.conf.head /etc/resolv.conf.bak > /etc/resolv.conf.new
+    mv /etc/resolv.conf.new /etc/resolv.conf
+    echo -e "${green}已更新 /etc/resolv.conf 文件${none}"
+fi
+
+echo -e "$green DNS 修改完成，主 DNS: 1.1.1.1, 副 DNS: 9.9.9.9 $none"
+echo "----------------------------------------------------------------"
+echo
