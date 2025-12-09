@@ -514,6 +514,39 @@ qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 echo
 echo "节点信息保存在 ~/_vless_reality_url_ 中"
 
+# ---------- 新增: 设置永久性快捷键 1keyvr ----------
+echo
+echo -e "$yellow设置永久性快捷键 '1keyvr' 以查看节点信息...$none"
+# 检查当前shell是bash还是zsh，并选择对应的配置文件
+if [[ -n "$ZSH_VERSION" ]]; then
+    CONFIG_FILE="$HOME/.zshrc"
+elif [[ -n "$BASH_VERSION" ]]; then
+    CONFIG_FILE="$HOME/.bashrc"
+else
+    # 如果无法判断，尝试检查文件是否存在
+    if [[ -f "$HOME/.bashrc" ]]; then
+        CONFIG_FILE="$HOME/.bashrc"
+    elif [[ -f "$HOME/.zshrc" ]]; then
+        CONFIG_FILE="$HOME/.zshrc"
+    else
+        # 如果都不存在，创建一个bashrc
+        CONFIG_FILE="$HOME/.bashrc"
+    fi
+fi
+
+# 检查别名是否已经存在
+if ! grep -q "^alias 1keyvr=" "$CONFIG_FILE" 2>/dev/null; then
+    # 如果别名不存在，则添加
+    echo "alias 1keyvr='cat ~/_vless_reality_url_'" >> "$CONFIG_FILE"
+    echo -e "${green}已将 '1keyvr' 别名添加到 $CONFIG_FILE${none}"
+else
+    echo -e "${green}检测到 '1keyvr' 别名已存在于 $CONFIG_FILE${none}"
+fi
+
+# 尝试重新加载配置文件，使别名立即生效（静默执行）
+source "$CONFIG_FILE" > /dev/null 2>&1 || true
+
 echo -e "$green DNS 优化完成，主 DNS: 1.1.1.1, 副 DNS: 9.9.9.9 $none"
+echo -e "$green快捷键设置完成！现在您可以直接在终端输入 '1keyvr' 来查看节点信息。$none"
 echo "----------------------------------------------------------------"
 echo
