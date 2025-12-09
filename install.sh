@@ -471,7 +471,7 @@ echo -e "${cyan}${vless_reality_url}${none}"
 echo
 sleep 3
 echo "以下两个二维码完全一样的内容"
-qrencode -t UTF8 $vless_reality_url
+# qrencode -t UTF8 $vless_reality_url
 qrencode -t ANSI $vless_reality_url
 echo
 echo "---------- END -------------"
