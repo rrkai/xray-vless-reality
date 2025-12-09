@@ -506,7 +506,6 @@ echo "---------- 二维码 (UTF8) ----------"
 qrencode -t UTF8 "$vless_reality_url_encoded"
 echo
 echo "---------- END -------------"
-echo "以上节点信息保存在 ~/_vless_reality_url_ 中"
 
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
@@ -514,10 +513,7 @@ echo "---------- 二维码 (UTF8) ----------" >> ~/_vless_reality_url_
 # 同样移除保存到文件中的二维码的 -s 1 参数
 qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 
-echo
-
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
-echo
 # 检查当前shell是bash还是zsh，并选择对应的配置文件
 if [[ -n "$ZSH_VERSION" ]]; then
     CONFIG_FILE="$HOME/.zshrc"
@@ -547,6 +543,6 @@ fi
 source "$CONFIG_FILE" > /dev/null 2>&1 || true
 
 echo -e "$green DNS 优化完成，主 DNS: 1.1.1.1, 副 DNS: 9.9.9.9 $none"
-echo -e "$green快捷键设置完成！现在您可以直接在终端输入 '1keyvr' 来查看节点信息。$none"
+echo -e "$green 快捷键设置完成！现在您可以直接在终端输入 '1keyvr' 来查看节点信息。$none"
 echo "----------------------------------------------------------------"
 echo
