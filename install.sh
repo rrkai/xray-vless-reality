@@ -115,7 +115,7 @@ apt install -y curl wget sudo jq qrencode net-tools lsof
 
 # Xray官方脚本 安装最新版本
 echo
-echo -e "${yellow}Xray官方脚本安装 v25.10.15 版本$none"
+echo -e "${yellow}Xray官方脚本安装 v25.12.2 版本$none"
 # echo -e "${yellow}Xray官方脚本安装最新版本$none"
 echo "----------------------------------------------------------------"
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install --version v25.12.2
@@ -292,8 +292,8 @@ fi
 # 目标网站
 if [[ -z $domain ]]; then
   echo -e "请输入一个 ${magenta}合适的域名${none} Input the domain"
-  read -p "(例如: learn.microsoft.com): " domain
-  [ -z "$domain" ] && domain="learn.microsoft.com"
+  read -p "(例如: www.overstock.com): " domain
+  [ -z "$domain" ] && domain="www.overstock.com"
 
   echo
   echo
