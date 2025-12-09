@@ -491,10 +491,6 @@ echo -e "$yellow 公钥 (PublicKey) = ${cyan}${public_key}$none"
 echo -e "$yellow ShortId = ${cyan}${shortid}$none"
 echo -e "$yellow SpiderX = ${cyan}${spiderx}$none"
 echo
-# (脚本前面部分保持不变...)
-# ... (直到生成二维码的部分)
-
-echo
 echo "---------- VLESS Reality URL ----------"
 if [[ $netstack == "6" ]]; then
   ip=[$ip]
@@ -505,82 +501,17 @@ vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
 echo -e "${cyan}${vless_reality_url}${none}"
 echo
 sleep 3
-echo "---------- 二维码 (Python) ----------"
-
-# 检查并安装 python3 和 pip3
-if ! command -v python3 &> /dev/null; then
-    echo "正在安装 python3..."
-    apt-get update -qq > /dev/null 2>&1
-    apt-get install -y python3 > /dev/null 2>&1
-fi
-
-if ! command -v pip3 &> /dev/null; then
-    echo "正在安装 pip3..."
-    apt-get update -qq > /dev/null 2>&1
-    apt-get install -y python3-pip > /dev/null 2>&1
-fi
-
-# 强制安装 qrcode[pil] 库
-echo "正在安装或更新 qrcode 库..."
-pip3 install qrcode[pil] > /dev/null 2>&1
-
-# 尝试使用 Python 生成二维码
-if python3 -c "
-import qrcode
-qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=2,
-    border=4,
-)
-qr.add_data('$vless_reality_url_encoded')
-qr.make(fit=True)
-qr.print_ascii(tty=True)
-" 2> /dev/null; then
-    # Python 生成成功
-    echo -e "${green}Python 二维码生成成功${none}"
-    QR_SUCCESS="python"
-else
-    # Python 生成失败，回退到 qrencode
-    echo -e "${yellow}Python 二维码生成失败，回退到 qrencode (UTF8)...${none}"
-    if command -v qrencode &> /dev/null; then
-        qrencode -t UTF8 "$vless_reality_url_encoded"
-        QR_SUCCESS="qrencode"
-    else
-        echo -e "${red}错误: 未找到 qrencode 工具，无法生成二维码。请手动安装 qrencode。${none}"
-        QR_SUCCESS="none"
-    fi
-fi
-
+echo "---------- 二维码 (UTF8) ----------"
+# 移除 -s 1 参数，使用默认大小以保证可读性
+qrencode -t UTF8 "$vless_reality_url_encoded"
 echo
 echo "---------- END -------------"
-echo "以上节点信息保存在 ~/_vless_reality_url_ 中"
 
-# 节点信息保存到文件 (URL 部分)
+# 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
-echo "---------- 二维码 (Python) ----------" >> ~/_vless_reality_url_
-
-# 根据上面的生成结果，将对应的二维码追加到文件
-if [[ "$QR_SUCCESS" == "python" ]]; then
-    python3 -c "
-import qrcode
-qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=2,
-    border=4,
-)
-qr.add_data('$vless_reality_url_encoded')
-qr.make(fit=True)
-qr.print_ascii(tty=True)
-" >> ~/_vless_reality_url_
-    echo -e "${green}Python 二维码已追加到 ~/_vless_reality_url_ 文件${none}"
-elif [[ "$QR_SUCCESS" == "qrencode" ]]; then
-    qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
-    echo -e "${green}qrencode 二维码已追加到 ~/_vless_reality_url_ 文件${none}"
-else
-    echo -e "${red}警告: 二维码未追加到文件。${none}"
-fi
+echo "---------- 二维码 (UTF8) ----------" >> ~/_vless_reality_url_
+# 同样移除保存到文件中的二维码的 -s 1 参数
+qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
 # 检查当前shell是bash还是zsh，并选择对应的配置文件
