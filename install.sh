@@ -118,7 +118,7 @@ echo
 echo -e "${yellow}Xray官方脚本安装 v25.10.15 版本$none"
 # echo -e "${yellow}Xray官方脚本安装最新版本$none"
 echo "----------------------------------------------------------------"
-bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install --version v25.10.15
+bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install --version v25.12.2
 # bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 
 # 更新 geodata
@@ -442,7 +442,7 @@ echo "----------------------------------------------------------------"
 service xray restart
 
 # 指纹FingerPrint
-fingerprint="random"
+fingerprint="edge"
 
 # SpiderX
 spiderx=""
