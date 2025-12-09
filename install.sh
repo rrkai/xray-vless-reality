@@ -485,45 +485,6 @@ echo "以下两个二维码完全一样的内容" >> ~/_vless_reality_url_
 qrencode -t UTF8 $vless_reality_url >> ~/_vless_reality_url_
 qrencode -t ANSI $vless_reality_url >> ~/_vless_reality_url_
 
-# 如果是 IPv6 小鸡，用 WARP 创建 IPv4 出站
-if [[ $netstack == "6" ]]; then
-    echo
-    echo -e "$yellow这是一个 IPv6 小鸡，用 WARP 创建 IPv4 出站$none"
-    echo "Telegram电报是直接访问IPv4地址的, 需要IPv4出站的能力"
-    echo "----------------------------------------------------------------"
-    pause
-
-    # 安装 WARP IPv4
-    curl -LO https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh
-    yes "" | bash menu.sh 4
-
-    # 重启 Xray
-    echo
-    echo -e "$yellow重启 Xray$none"
-    echo "----------------------------------------------------------------"
-    service xray restart
-
-# 如果是 IPv4 小鸡，用 WARP 创建 IPv6 出站
-elif  [[ $netstack == "4" ]]; then
-    echo
-    echo -e "$yellow这是一个 IPv4 小鸡，用 WARP 创建 IPv6 出站$none"
-    echo -e "有些热门小鸡用原生的IPv4出站访问Google需要通过人机验证, 可以通过修改config.json指定google流量走WARP的IPv6出站解决"
-    echo -e "群组: ${cyan} https://t.me/+q5WPfGjtwukyZjhl ${none}"
-    echo -e "教程: ${cyan} https://zelikk.blogspot.com/2022/03/racknerd-v2ray-cloudflare-warp--ipv6-google-domainstrategy-outboundtag-routing.html ${none}"
-    echo -e "视频: ${cyan} https://youtu.be/Yvvm4IlouEk ${none}"    
-    echo "----------------------------------------------------------------"
-    pause
-
-    # 安装 WARP IPv6
-    curl -LO https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh
-    yes "" | bash menu.sh 6
-
-    # 重启 Xray
-    echo
-    echo -e "$yellow重启 Xray$none"
-    echo "----------------------------------------------------------------"
-    service xray restart
-
 fi
 
 echo
