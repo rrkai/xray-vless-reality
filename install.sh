@@ -90,7 +90,7 @@ if [ $# -ge 1 ]; then
     # 第3个参数是域名
     domain=${3}
     if [[ -z $domain ]]; then
-      domain="learn.microsoft.com"
+      domain="www.overstock.com"
     fi
 
     # 第4个参数是UUID
