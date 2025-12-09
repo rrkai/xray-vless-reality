@@ -472,18 +472,16 @@ vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
 echo -e "${cyan}${vless_reality_url}${none}"
 echo
 sleep 3
-echo "---------- 二维码 (UTF8, 缩小50%) ----------"
-# 使用 -s 1 参数缩小二维码模块大小，达到整体缩小约50%的效果
-qrencode -t UTF8 -s 1.5 "$vless_reality_url_encoded"
+echo "---------- 二维码 (UTF8) ----------"
+qrencode -t UTF8 "$vless_reality_url_encoded"
 echo
 echo "---------- END -------------"
 echo "以上节点信息保存在 ~/_vless_reality_url_ 中"
 
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
-echo "---------- 二维码 (UTF8, 缩小50%) ----------" >> ~/_vless_reality_url_
-# 同样为保存到文件中的二维码应用 -s 1 参数
-qrencode -t UTF8 -s 1.5 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
+echo "---------- 二维码 (UTF8) ----------" >> ~/_vless_reality_url_
+qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 
 echo
 echo "节点信息保存在 ~/_vless_reality_url_ 中"
