@@ -480,7 +480,7 @@ echo "以上节点信息保存在 ~/_vless_reality_url_ 中"
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
 echo "以下两个二维码完全一样的内容" >> ~/_vless_reality_url_
-qrencode -t UTF8 $vless_reality_url >> ~/_vless_reality_url_
+# qrencode -t UTF8 $vless_reality_url >> ~/_vless_reality_url_
 qrencode -t ANSI $vless_reality_url >> ~/_vless_reality_url_
 
 echo
