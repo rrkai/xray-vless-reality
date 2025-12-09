@@ -516,7 +516,6 @@ echo "节点信息保存在 ~/_vless_reality_url_ 中"
 
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
 echo
-echo -e "$yellow设置永久性快捷键 '1keyvr' 以查看节点信息...$none"
 # 检查当前shell是bash还是zsh，并选择对应的配置文件
 if [[ -n "$ZSH_VERSION" ]]; then
     CONFIG_FILE="$HOME/.zshrc"
@@ -538,9 +537,7 @@ fi
 if ! grep -q "^alias 1keyvr=" "$CONFIG_FILE" 2>/dev/null; then
     # 如果别名不存在，则添加
     echo "alias 1keyvr='cat ~/_vless_reality_url_'" >> "$CONFIG_FILE"
-    echo -e "${green}已将 '1keyvr' 别名添加到 $CONFIG_FILE${none}"
 else
-    echo -e "${green}检测到 '1keyvr' 别名已存在于 $CONFIG_FILE${none}"
 fi
 
 # 尝试重新加载配置文件，使别名立即生效（静默执行）
