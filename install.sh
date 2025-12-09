@@ -500,15 +500,51 @@ vless_reality_url="vless://${uuid}@${ip}:${port}?flow=xtls-rprx-vision&encryptio
 vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
 echo -e "${cyan}${vless_reality_url}${none}"
 echo
-sleep 3
-echo "---------- 二维码 (UTF8) ----------"
-qrencode -t ANSI256 "$vless_reality_url_encoded"
+
+# 尝试生成并显示 PNG 二维码
+temp_qr_png="/tmp/vless_qr_temp.png"
+if qrencode -t PNG -o "$temp_qr_png" -m 2 -s 4 "$vless_reality_url_encoded" 2>/dev/null; then
+    echo "---------- 二维码 (PNG) - 尝试在终端显示或查看 $temp_qr_png 文件 ----------"
+    # 尝试使用 catimg 或 img2txt 或直接输出文件名
+    # 这些工具需要提前安装，否则命令会失败
+    if command -v catimg &> /dev/null; then
+        catimg "$temp_qr_png"
+    elif command -v img2txt &> /dev/null; then
+        img2txt -f utf8 "$temp_qr_png"
+    else
+        # 如果没有合适的终端图片查看器，提示用户查看文件
+        echo "已生成二维码图片文件: $temp_qr_png"
+        echo "请将此文件下载到本地，使用手机扫码软件扫描。"
+        # 回退到 ANSI256 文本模式打印
+        echo "---------- 二维码 (ANSI256 - 回退) ----------"
+        qrencode -t ANSI256 "$vless_reality_url_encoded"
+    fi
+else
+    # 如果生成 PNG 失败，回退到 ANSI256 文本模式
+    echo "---------- 二维码 (ANSI256 - PNG生成失败回退) ----------"
+    qrencode -t ANSI256 "$vless_reality_url_encoded"
+fi
+
+echo
 echo "---------- END -------------"
+echo "以上节点信息保存在 ~/_vless_reality_url_ 中"
 
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
-echo "---------- 二维码 (UTF8) ----------" >> ~/_vless_reality_url_
+echo "---------- 二维码 (ANSI256) - 保存在 $temp_qr_png (如果生成成功) ----------" >> ~/_vless_reality_url_
 qrencode -t ANSI256 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
+# 也记录PNG文件路径（如果生成成功）
+if [[ -f "$temp_qr_png" ]]; then
+    echo "二维码图片已保存至: $temp_qr_png" >> ~/_vless_reality_url_
+fi
+
+# 清理临时 PNG 文件
+if [[ -f "$temp_qr_png" ]]; then
+    rm "$temp_qr_png"
+fi
+
+echo
+echo "节点信息保存在 ~/_vless_reality_url_ 中"
 
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
 # 检查当前shell是bash还是zsh，并选择对应的配置文件
