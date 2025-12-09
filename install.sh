@@ -512,7 +512,6 @@ echo "---------- 二维码 (UTF8) ----------" >> ~/_vless_reality_url_
 qrencode -t UTF8 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 
 echo
-echo "节点信息保存在 ~/_vless_reality_url_ 中"
 
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
 echo
