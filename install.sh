@@ -527,8 +527,6 @@ fi
 
 echo
 echo "---------- END -------------"
-echo "以上节点信息保存在 ~/_vless_reality_url_ 中"
-
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
 echo "---------- 二维码 (ANSI256) - 保存在 $temp_qr_png (如果生成成功) ----------" >> ~/_vless_reality_url_
@@ -542,9 +540,6 @@ fi
 if [[ -f "$temp_qr_png" ]]; then
     rm "$temp_qr_png"
 fi
-
-echo
-echo "节点信息保存在 ~/_vless_reality_url_ 中"
 
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
 # 检查当前shell是bash还是zsh，并选择对应的配置文件
