@@ -533,7 +533,7 @@ if ! grep -q "^alias 1keyvr=" "$CONFIG_FILE" 2>/dev/null; then
     # 如果别名不存在，则添加
     echo "alias 1keyvr='cat ~/_vless_reality_url_'" >> "$CONFIG_FILE"
 else
-    echo -e "${green}检测到 '1keyvr' 别名已存在于 $CONFIG_FILE${none}"
+    echo -e "${green} 检测到 '1keyvr' 别名已存在于 $CONFIG_FILE${none}"
 fi
 
 # 尝试重新加载配置文件，使别名立即生效（静默执行）
