@@ -28,8 +28,6 @@ apt-get -y install curl wget -qq
 # 说明
 echo
 echo -e "$yellow此脚本仅兼容于Debian 10+系统. 如果你的系统不符合,请Ctrl+C退出脚本$none"
-echo -e "可以去 ${cyan}https://github.com/crazypeace/xray-vless-reality${none} 查看脚本整体思路和关键命令, 以便针对你自己的系统做出调整."
-echo -e "有问题加群 ${cyan}https://t.me/+q5WPfGjtwukyZjhl${none}"
 echo -e "本脚本支持带参数执行, 省略交互过程, 详见GitHub."
 echo "----------------------------------------------------------------"
 
@@ -107,7 +105,7 @@ if [ $# -ge 1 ]; then
     echo "----------------------------------------------------------------"
 fi
 
-pause
+# pause
 
 # 准备工作
 apt update
@@ -484,8 +482,6 @@ echo $vless_reality_url > ~/_vless_reality_url_
 echo "以下两个二维码完全一样的内容" >> ~/_vless_reality_url_
 qrencode -t UTF8 $vless_reality_url >> ~/_vless_reality_url_
 qrencode -t ANSI $vless_reality_url >> ~/_vless_reality_url_
-
-fi
 
 echo
 echo "节点信息保存在 ~/_vless_reality_url_ 中"
