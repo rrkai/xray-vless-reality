@@ -27,7 +27,7 @@ apt-get -y install curl wget -qq
 
 # 说明
 echo
-echo -e "$yellow此脚本仅兼容于Debian 10+系统. 如果你的系统不符合,请Ctrl+C退出脚本$none"
+echo -e "$yellow此脚本仅兼容于Debian 11+系统. 如果你的系统不符合,请Ctrl+C退出脚本$none"
 echo -e "本脚本支持带参数执行, 省略交互过程, 详见GitHub."
 echo "----------------------------------------------------------------"
 
@@ -147,7 +147,6 @@ if [[ -n $uuid ]]; then
 fi
 
 # 打开BBR
-echo
 echo -e "$yellow打开BBR$none"
 echo "----------------------------------------------------------------"
 sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
@@ -157,9 +156,7 @@ echo "net.core.default_qdisc = fq" >>/etc/sysctl.conf
 sysctl -p >/dev/null 2>&1
 
 # ---------- 新增: 修改 DNS 步骤 ----------
-echo
 echo -e "$yellow开始修改系统 DNS$none"
-echo "----------------------------------------------------------------"
 
 # 创建或修改 /etc/resolv.conf.head 文件
 cat > /etc/resolv.conf.head << EOF
@@ -184,7 +181,7 @@ else
     mv /etc/resolv.conf.new /etc/resolv.conf
     echo -e "${green}已更新 /etc/resolv.conf 文件${none}"
 fi
-
+echo "----------------------------------------------------------------"
 # 配置 VLESS_Reality 模式, 需要:端口, UUID, x25519公私钥, 目标网站
 echo
 echo -e "$yellow配置 VLESS_Reality 模式$none"
@@ -330,8 +327,7 @@ if [[ -z $domain ]]; then
 fi
 
 # 配置config.json
-echo
-echo -e "$yellow 配置 /usr/local/etc/xray/config.json $none"
+echo -e "$yellow配置 /usr/local/etc/xray/config.json $none"
 echo "----------------------------------------------------------------"
 cat > /usr/local/etc/xray/config.json <<-EOF
 { // VLESS + Reality
@@ -463,7 +459,6 @@ cat > /usr/local/etc/xray/config.json <<-EOF
 EOF
 
 # 重启 Xray
-echo
 echo -e "$yellow重启 Xray$none"
 echo "----------------------------------------------------------------"
 service xray restart
@@ -490,8 +485,8 @@ echo -e "$yellow 指纹 (Fingerprint) = ${cyan}${fingerprint}$none"
 echo -e "$yellow 公钥 (PublicKey) = ${cyan}${public_key}$none"
 echo -e "$yellow ShortId = ${cyan}${shortid}$none"
 echo -e "$yellow SpiderX = ${cyan}${spiderx}$none"
-echo
 echo "---------- VLESS Reality URL ----------"
+echo
 if [[ $netstack == "6" ]]; then
   ip=[$ip]
 fi
@@ -504,7 +499,7 @@ echo
 # 尝试生成并显示 PNG 二维码
 temp_qr_png="/tmp/vless_qr_temp.png"
 if qrencode -t PNG -o "$temp_qr_png" -m 2 -s 4 "$vless_reality_url_encoded" 2>/dev/null; then
-    echo "---------- 二维码 (PNG) - 尝试在终端显示或查看 $temp_qr_png 文件 ----------"
+    echo "---------- 二维码 (PNG) ----------"
     # 尝试使用 catimg 或 img2txt 或直接输出文件名
     # 这些工具需要提前安装，否则命令会失败
     if command -v catimg &> /dev/null; then
@@ -516,12 +511,12 @@ if qrencode -t PNG -o "$temp_qr_png" -m 2 -s 4 "$vless_reality_url_encoded" 2>/d
         echo "已生成二维码图片文件: $temp_qr_png"
         echo "请将此文件下载到本地，使用手机扫码软件扫描。"
         # 回退到 ANSI256 文本模式打印 (缩小边距)
-        echo "---------- 二维码 (ANSI256 - 回退, 边距=1) ----------"
+        echo "---------- 二维码 ----------"
         qrencode -t ANSI256 -m 1 "$vless_reality_url_encoded"
     fi
 else
     # 如果生成 PNG 失败，回退到 ANSI256 文本模式 (缩小边距)
-    echo "---------- 二维码 (ANSI256 - PNG生成失败回退, 边距=1) ----------"
+    echo "---------- 二维码 ----------"
     qrencode -t ANSI256 -m 1 "$vless_reality_url_encoded"
 fi
 
