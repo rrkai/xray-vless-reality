@@ -14,7 +14,7 @@ apt update
 apt install -y curl
 ```
 ```
-bash <(curl -L https://github.com/crazypeace/xray-vless-reality/raw/main/install.sh)
+bash <(curl -L https://github.com/rrkai/xray-vless-reality/raw/main/install.sh)
 ```
 
 脚本中很大部分都是在校验用户的输入。其实照着下面的步骤自己配置就行了。
@@ -58,7 +58,7 @@ xray uuid
 
 # 选一个你喜欢的指纹 (Fingerprint)
 可选项见此：https://xtls.github.io/en/config/transport.html 不想选，就用`random`
-![image](https://github.com/crazypeace/xray-vless-reality/assets/665889/89cdc776-95b4-4003-b89f-ac5a48bd1da5)
+![image](https://github.com/rrkai/xray-vless-reality/assets/665889/89cdc776-95b4-4003-b89f-ac5a48bd1da5)
 
 
 # Reality 协议中定义了 ShortId, SpiderX
@@ -165,7 +165,7 @@ bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release
 
 # 脚本支持带参数运行
 ```
-bash <(curl -L https://github.com/crazypeace/xray-vless-reality/raw/main/install.sh) <netstack> [port] [domain] [UUID]
+bash <(curl -L https://github.com/rrkai/xray-vless-reality/raw/main/install.sh) <netstack> [port] [domain] [UUID]
 ```
 
 其中, 
@@ -180,10 +180,9 @@ bash <(curl -L https://github.com/crazypeace/xray-vless-reality/raw/main/install
 
 例如,
 ```
-bash <(curl -L https://github.com/crazypeace/xray-vless-reality/raw/main/install.sh) 6
-bash <(curl -L https://github.com/crazypeace/xray-vless-reality/raw/main/install.sh) 6 443
-bash <(curl -L https://github.com/crazypeace/xray-vless-reality/raw/main/install.sh) 6 443 learn.microsoft.com
-bash <(curl -L https://github.com/crazypeace/xray-vless-reality/raw/main/install.sh) 6 443 learn.microsoft.com 1b0b723f-0544-4f9c-8df8-2b8975c5e47a
+bash <(curl -L https://github.com/rrkai/xray-vless-reality/raw/main/install.sh) 4
+bash <(curl -L https://github.com/rrkai/xray-vless-reality/raw/main/install.sh) 6 443
+bash <(curl -L https://github.com/rrkai/xray-vless-reality/raw/main/install.sh) 6 443 learn.microsoft.com
 ```
 
 
