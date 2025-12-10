@@ -515,22 +515,22 @@ if qrencode -t PNG -o "$temp_qr_png" -m 2 -s 4 "$vless_reality_url_encoded" 2>/d
         # 如果没有合适的终端图片查看器，提示用户查看文件
         echo "已生成二维码图片文件: $temp_qr_png"
         echo "请将此文件下载到本地，使用手机扫码软件扫描。"
-        # 回退到 ANSI256 文本模式打印
-        echo "---------- 二维码 (ANSI256 - 回退) ----------"
-        qrencode -t ANSI256 "$vless_reality_url_encoded"
+        # 回退到 ANSI256 文本模式打印 (缩小边距)
+        echo "---------- 二维码 (ANSI256 - 回退, 边距=1) ----------"
+        qrencode -t ANSI256 -m 1 "$vless_reality_url_encoded"
     fi
 else
-    # 如果生成 PNG 失败，回退到 ANSI256 文本模式
-    echo "---------- 二维码 (ANSI256 - PNG生成失败回退) ----------"
-    qrencode -t ANSI256 "$vless_reality_url_encoded"
+    # 如果生成 PNG 失败，回退到 ANSI256 文本模式 (缩小边距)
+    echo "---------- 二维码 (ANSI256 - PNG生成失败回退, 边距=1) ----------"
+    qrencode -t ANSI256 -m 1 "$vless_reality_url_encoded"
 fi
 
-echo
 echo "---------- END -------------"
+
 # 节点信息保存到文件中
 echo $vless_reality_url > ~/_vless_reality_url_
-echo "---------- 二维码 (ANSI256) - 保存在 $temp_qr_png (如果生成成功) ----------" >> ~/_vless_reality_url_
-qrencode -t ANSI256 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
+echo "---------- 二维码 (ANSI256, 边距=1) - 保存在 $temp_qr_png (如果生成成功) ----------" >> ~/_vless_reality_url_
+qrencode -t ANSI256 -m 1 "$vless_reality_url_encoded" >> ~/_vless_reality_url_
 # 也记录PNG文件路径（如果生成成功）
 if [[ -f "$temp_qr_png" ]]; then
     echo "二维码图片已保存至: $temp_qr_png" >> ~/_vless_reality_url_
