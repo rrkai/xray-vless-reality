@@ -484,16 +484,6 @@ echo -e "$yellow 指纹 (Fingerprint) = ${cyan}${fingerprint}$none"
 echo -e "$yellow 公钥 (PublicKey) = ${cyan}${public_key}$none"
 echo -e "$yellow ShortId = ${cyan}${shortid}$none"
 echo -e "$yellow SpiderX = ${cyan}${spiderx}$none"
-echo "---------- 以下是节点链接 ----------"
-echo
-if [[ $netstack == "6" ]]; then
-  ip=[$ip]
-fi
-vless_reality_url="vless://${uuid}@${ip}:${port}?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&sni=${domain}&fp=${fingerprint}&pbk=${public_key}&sid=${shortid}&spx=${spiderx}&#VLESS_R_${ip}"
-# 对URL中的特殊字符进行编码，特别是#号，以提高扫码成功率
-vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
-echo -e "${cyan}${vless_reality_url}${none}"
-echo "---------- 以上是节点链接 ----------"
 echo
 
 # 尝试生成并显示 PNG 二维码
@@ -536,6 +526,17 @@ if [[ -f "$temp_qr_png" ]]; then
     rm "$temp_qr_png"
 fi
 
+echo "---------- 以下是节点链接 ----------"
+echo
+if [[ $netstack == "6" ]]; then
+  ip=[$ip]
+fi
+vless_reality_url="vless://${uuid}@${ip}:${port}?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&sni=${domain}&fp=${fingerprint}&pbk=${public_key}&sid=${shortid}&spx=${spiderx}&#VLESS_R_${ip}"
+# 对URL中的特殊字符进行编码，特别是#号，以提高扫码成功率
+vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
+echo -e "${cyan}${vless_reality_url}${none}"
+echo "---------- 以上是节点链接 ----------"
+echo
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
 # 检查当前shell是bash还是zsh，并选择对应的配置文件
 if [[ -n "$ZSH_VERSION" ]]; then
