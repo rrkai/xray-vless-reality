@@ -484,7 +484,7 @@ echo -e "$yellow 指纹 (Fingerprint) = ${cyan}${fingerprint}$none"
 echo -e "$yellow 公钥 (PublicKey) = ${cyan}${public_key}$none"
 echo -e "$yellow ShortId = ${cyan}${shortid}$none"
 echo -e "$yellow SpiderX = ${cyan}${spiderx}$none"
-echo "---------- VLESS Reality URL ----------"
+echo "---------- 以下是节点链接 ----------"
 echo
 if [[ $netstack == "6" ]]; then
   ip=[$ip]
@@ -493,6 +493,7 @@ vless_reality_url="vless://${uuid}@${ip}:${port}?flow=xtls-rprx-vision&encryptio
 # 对URL中的特殊字符进行编码，特别是#号，以提高扫码成功率
 vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
 echo -e "${cyan}${vless_reality_url}${none}"
+echo "---------- 以上是节点链接 ----------"
 echo
 
 # 尝试生成并显示 PNG 二维码
