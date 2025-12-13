@@ -155,7 +155,7 @@ echo "net.ipv4.tcp_congestion_control = bbr" >>/etc/sysctl.conf
 echo "net.core.default_qdisc = fq" >>/etc/sysctl.conf
 sysctl -p >/dev/null 2>&1
 
-# ---------- 新增: 修改 DNS 步骤 ----------
+# ---------- 优化 DNS 步骤 ----------
 echo -e "$yellow开始修改系统 DNS$none"
 
 # 创建或修改 /etc/resolv.conf.head 文件
