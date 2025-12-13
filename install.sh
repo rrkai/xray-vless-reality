@@ -484,11 +484,10 @@ echo -e "$yellow 指纹 (Fingerprint) = ${cyan}${fingerprint}$none"
 echo -e "$yellow 公钥 (PublicKey) = ${cyan}${public_key}$none"
 echo -e "$yellow ShortId = ${cyan}${shortid}$none"
 echo -e "$yellow SpiderX = ${cyan}${spiderx}$none"
-echo
-
 echo "---------- END -------------"
 echo
 echo "---------- 以下是节点链接 ----------"
+echo
 echo
 if [[ $netstack == "6" ]]; then
   ip=[$ip]
@@ -497,6 +496,7 @@ vless_reality_url="vless://${uuid}@${ip}:${port}?flow=xtls-rprx-vision&encryptio
 # 对URL中的特殊字符进行编码，特别是#号，以提高扫码成功率
 vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
 echo -e "${cyan}${vless_reality_url}${none}"
+echo
 echo
 echo "---------- 以上是节点链接 ----------"
 echo $vless_reality_url > ~/_vless_reality_url_
