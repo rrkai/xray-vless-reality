@@ -535,8 +535,8 @@ vless_reality_url="vless://${uuid}@${ip}:${port}?flow=xtls-rprx-vision&encryptio
 # 对URL中的特殊字符进行编码，特别是#号，以提高扫码成功率
 vless_reality_url_encoded=$(echo "$vless_reality_url" | sed 's/#/%23/g')
 echo -e "${cyan}${vless_reality_url}${none}"
-echo "---------- 以上是节点链接 ----------"
 echo
+echo "---------- 以上是节点链接 ----------"
 # ---------- 新增: 设置永久性快捷键 1keyvr ----------
 # 检查当前shell是bash还是zsh，并选择对应的配置文件
 if [[ -n "$ZSH_VERSION" ]]; then
