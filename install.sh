@@ -155,6 +155,68 @@ echo "net.ipv4.tcp_congestion_control = bbr" >>/etc/sysctl.conf
 echo "net.core.default_qdisc = fq" >>/etc/sysctl.conf
 sysctl -p >/dev/null 2>&1
 
+# ---------- 新增: 自动化设置 SWAP ----------
+echo -e "$yellow开始检查并设置 SWAP 虚拟内存...$none"
+echo "----------------------------------------------------------------"
+
+# 获取物理内存大小 (单位: KB)
+total_memory_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+# 将KB转换为MB以便比较
+total_memory_mb=$(( total_memory_kb / 1024 ))
+
+# 计算所需的SWAP大小 (MB)
+if [ $total_memory_mb -lt 2048 ]; then
+    swap_size_mb=$(( total_memory_mb * 2 ))
+    calculated_swap_info="物理内存 ($total_memory_mb MB) 小于 2048MB, 设置 SWAP 为物理内存的2倍 ($swap_size_mb MB)"
+else
+    swap_size_mb=$total_memory_mb
+    calculated_swap_info="物理内存 ($total_memory_mb MB) 大于等于 2048MB, 设置 SWAP 为物理内存的1倍 ($swap_size_mb MB)"
+fi
+
+# 将计算结果存入一个变量，供后续输出使用
+FINAL_SWAP_SIZE_MB=$swap_size_mb
+
+echo -e "${green}$calculated_swap_info.${none}"
+
+# 检查是否存在现有的swap文件或分区
+existing_swap=$(swapon --show=NAME --noheadings | head -n1)
+if [ -n "$existing_swap" ]; then
+    echo -e "${yellow}检测到现有 SWAP: $existing_swap, 正在关闭...${none}"
+    swapoff "$existing_swap"
+    if [ -f "$existing_swap" ]; then
+        echo -e "${green}删除旧的 SWAP 文件: $existing_swap${none}"
+        rm -f "$existing_swap"
+    fi
+fi
+
+# 创建新的swap文件
+swap_path="/swapfile"
+echo -e "${green}创建新的 SWAP 文件: $swap_path${none}"
+dd if=/dev/zero of="$swap_path" bs=1M count=$swap_size_mb status=progress
+chmod 600 "$swap_path"
+mkswap "$swap_path"
+
+# 启用新的swap
+swapon "$swap_path"
+
+# 配置开机自启
+if ! grep -q "^$swap_path" /etc/fstab; then
+    echo -e "${green}配置 SWAP 开机自启 (/etc/fstab)${none}"
+    echo "$swap_path none swap sw 0 0" >> /etc/fstab
+else
+    echo -e "${green}SWAP 已配置开机自启。${none}"
+fi
+
+# 设置vm.swappiness参数，建议用于SSD的值，减少对硬盘的频繁写入
+swappiness_value=10
+echo -e "${green}设置 vm.swappiness=$swappiness_value${none}"
+sed -i '/^vm.swappiness/d' /etc/sysctl.conf
+echo "vm.swappiness = $swappiness_value" >> /etc/sysctl.conf
+sysctl -p >/dev/null 2>&1
+
+echo -e "${green}SWAP 设置完成。当前 SWAP 信息:${none}"
+swapon --show
+echo "----------------------------------------------------------------"
 # ---------- 优化 DNS 步骤 ----------
 echo -e "$yellow开始修改系统 DNS$none"
 
