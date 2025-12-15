@@ -155,7 +155,7 @@ echo "net.ipv4.tcp_congestion_control = bbr" >>/etc/sysctl.conf
 echo "net.core.default_qdisc = fq" >>/etc/sysctl.conf
 sysctl -p >/dev/null 2>&1
 
-# ---------- 新增: 自动化设置 SWAP ----------
+ ---------- 新增: 自动化设置 SWAP ----------
 echo -e "$yellow开始检查并设置 SWAP 虚拟内存...$none"
 echo "----------------------------------------------------------------"
 
@@ -164,19 +164,27 @@ total_memory_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
 # 将KB转换为MB以便比较
 total_memory_mb=$(( total_memory_kb / 1024 ))
 
-# 计算所需的SWAP大小 (MB)
-if [ $total_memory_mb -lt 2048 ]; then
-    swap_size_mb=$(( total_memory_mb * 2 ))
-    calculated_swap_info="物理内存 ($total_memory_mb MB) 小于 2048MB, 设置 SWAP 为物理内存的2倍 ($swap_size_mb MB)"
+# 根据物理内存计算基础 SWAP 大小 (MB)
+if [ $total_memory_mb -lt 512 ]; then
+    swap_size_mb_base=1024
+    calculation_info="物理内存 ($total_memory_mb MB) 小于 512MB"
+elif [ $total_memory_mb -lt 1024 ]; then
+    swap_size_mb_base=2048
+    calculation_info="物理内存 ($total_memory_mb MB) 在 512MB 和 1024MB 之间"
 else
-    swap_size_mb=$total_memory_mb
-    calculated_swap_info="物理内存 ($total_memory_mb MB) 大于等于 2048MB, 设置 SWAP 为物理内存的1倍 ($swap_size_mb MB)"
+    swap_size_mb_base=$total_memory_mb
+    calculation_info="物理内存 ($total_memory_mb MB) 大于等于 1024MB, 初始 SWAP 等于物理内存"
 fi
 
-# 将计算结果存入一个变量，供后续输出使用
+# 计算向上取整到最接近的 GB (1024MB) 的 SWAP 大小
+# 1. 将基础大小加 1023 (即 1024 - 1)，然后整除 1024，这相当于向上取整到 1024 的倍数
+# 2. 再乘以 1024 得到最终的 MB 数
+swap_size_mb=$(( ((swap_size_mb_base + 1023) / 1024) * 1024 ))
+
+# 存储最终的 SWAP 大小，供后续输出使用
 FINAL_SWAP_SIZE_MB=$swap_size_mb
 
-echo -e "${green}$calculated_swap_info.${none}"
+echo -e "${green}$calculation_info, 计算后向上取整到最近的GB值为: ${swap_size_mb}MB.${none}"
 
 # 检查是否存在现有的swap文件或分区
 existing_swap=$(swapon --show=NAME --noheadings | head -n1)
@@ -191,7 +199,7 @@ fi
 
 # 创建新的swap文件
 swap_path="/swapfile"
-echo -e "${green}创建新的 SWAP 文件: $swap_path${none}"
+echo -e "${green}创建新的 SWAP 文件: $swap_path (${swap_size_mb}MB)${none}"
 dd if=/dev/zero of="$swap_path" bs=1M count=$swap_size_mb status=progress
 chmod 600 "$swap_path"
 mkswap "$swap_path"
