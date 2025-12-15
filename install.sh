@@ -592,7 +592,7 @@ fi
 source "$CONFIG_FILE" > /dev/null 2>&1 || true
 
 echo -e "$green DNS 优化完成，主 DNS: 1.1.1.1, 副 DNS: 9.9.9.9 $none"
-echo -e "$green SWAP虚拟内存设置完成，TCP参数微调优完成。 $none"
+echo -e "$green 设置SWAP虚拟内存(${FINAL_SWAP_SIZE_MB}MB)完成，TCP参数微调优完成。 $none" 
 echo -e "$green 快捷键设置完成！现在您可以直接在终端输入 '1keyvr' 来查看节点信息。$none"
 echo "----------------------------------------------------------------"
 echo
