@@ -225,32 +225,20 @@ sysctl -p >/dev/null 2>&1
 echo -e "${green}SWAP 设置完成。当前 SWAP 信息:${none}"
 swapon --show
 echo "----------------------------------------------------------------"
-# ---------- 优化 DNS 步骤 ----------
-echo -e "$yellow开始修改系统 DNS$none"
+# ---------- 优化 DNS 步骤: 下载并执行外部脚本 ----------
+echo -e "$yellow开始执行外部 DNS 优化脚本...$none"
+echo "----------------------------------------------------------------"
 
-# 创建或修改 /etc/resolv.conf.head 文件
-cat > /etc/resolv.conf.head << EOF
-nameserver 1.1.1.1
-nameserver 9.9.9.9
-EOF
-
-# 重新生成 /etc/resolv.conf 文件
-if command -v resolvconf &> /dev/null; then
-    # 如果安装了 resolvconf 工具
-    resolvconf -u
-    echo -e "${green}已通过 resolvconf 更新 DNS${none}"
+# 使用 curl 下载脚本并直接执行
+if curl -sSL https://raw.githubusercontent.com/rrkai/diy/main/xhdns.sh | bash; then
+    echo -e "${green}外部 DNS 优化脚本执行成功。$none"
 else
-    # 如果没有安装 resolvconf，直接备份并覆盖 /etc/resolv.conf
-    # 检查 /etc/resolv.conf 是否已存在备份
-    if [[ ! -f /etc/resolv.conf.bak ]]; then
-        cp /etc/resolv.conf /etc/resolv.conf.bak
-        echo -e "${green}已备份原 /etc/resolv.conf 到 /etc/resolv.conf.bak${none}"
-    fi
-    # 将 head 文件内容和原内容合并，写入新的 resolv.conf
-    cat /etc/resolv.conf.head /etc/resolv.conf.bak > /etc/resolv.conf.new
-    mv /etc/resolv.conf.new /etc/resolv.conf
-    echo -e "${green}已更新 /etc/resolv.conf 文件${none}"
+    echo -e "${red}警告: 外部 DNS 优化脚本执行失败，请检查网络连接或脚本本身。$none"
+    # 可选：如果 DNS 脚本失败，是否继续执行？这里选择继续，因为不是致命错误。
+    # 如果想在 DNS 失败时停止脚本，可以取消下面一行的注释
+    # exit 1 
 fi
+
 echo "----------------------------------------------------------------"
 # 配置 VLESS_Reality 模式, 需要:端口, UUID, x25519公私钥, 目标网站
 echo -e "$yellow配置 VLESS_Reality 模式$none"
